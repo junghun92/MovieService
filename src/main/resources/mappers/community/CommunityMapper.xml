@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.community.repository.mapper.CommunityMapper">
+	<!-- 게시글 검색 -->
+	<sql id="search">
+	    <!-- 검색 키워드가 있을 때 -->
+	    <if test="keyword != null and keyword != ''">
+	        <choose>
+	            <!-- 검색 유형이 있을 때 -->
+	            <when test="searchType != null and searchType != ''">
+	                <choose>
+	                    <when test="'title'.equals( searchType )">
+	                        AND title LIKE CONCAT('%', #{keyword}, '%')
+	                    </when>
+	                    <when test="'content'.equals( searchType )">
+	                        AND content LIKE CONCAT('%', #{keyword}, '%')
+	                    </when>
+	                </choose>
+	            </when>
+	            <!-- 전체 검색일 때 때 -->
+	            <otherwise>
+	                AND (
+	                       title LIKE CONCAT('%', #{keyword}, '%')
+	                    OR content LIKE CONCAT('%', #{keyword}, '%')
+	                )
+	            </otherwise>
+	        </choose>
+	    </if>
+	</sql>
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO COMMUNITY 
+		(
+			USER_ID,
+			TITLE,
+			CONTENT,
+			REG_DATE
+		) 
+		VALUES
+		(
+			#{userId},
+			#{title},
+			#{content},
+			FORMATDATETIME(now(), 'yyyy-MM-dd')
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE COMMUNITY SET
+			TITLE = #{community.title},
+			CONTENT = #{community.content},
+			EDIT_DATE = FORMATDATETIME(now(), 'yyyy-MM-dd')
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<select id="findAll" resultType="Community">
+		SELECT
+			ID,
+			USER_ID,
+			TITLE,
+			CONTENT,
+			REG_DATE,
+			EDIT_DATE
+		FROM
+			COMMUNITY
+		<where>
+			<include refid="search" />
+		</where>
+		ORDER BY
+			ID DESC
+		LIMIT #{pagination.limitStart}, #{recordSize}
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			COMMUNITY
+		<where>
+			<include refid="search" />
+		</where>
+	</select>
+	
+	<select id="findById" resultType="Community">
+		SELECT
+			ID,
+			USER_ID,
+			TITLE,
+			CONTENT,
+			REG_DATE,
+			EDIT_DATE
+		FROM
+			COMMUNITY
+		WHERE
+			ID = #{id}
+	</select>
+
+</mapper>
