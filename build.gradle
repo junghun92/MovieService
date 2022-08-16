@@ -25,6 +25,8 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
 	//MyBatis 추가
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+	//시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	
 	compileOnly 'org.projectlombok:lombok'
 	//H2 데이터베이스 추가

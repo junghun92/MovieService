@@ -14,7 +14,7 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <!-- Core theme JS-->
         <script src="/js/scripts.js"></script>
     </head>
@@ -40,13 +40,14 @@
                 </li>
             </ul>
             
-			<th:block th:if="${userName}">
-			    Logged in as: <span id="user" th:text="${userName}"></span>
+			<th:block th:if="${session.user}">
+			    <span id="user" th:text="${session.user.name}"></span>
 			    <a href="/logout" class="btn btn-info active" role="button">Logout</a>
 			</th:block>
-			<th:block th:unless="${userName}">
-			    <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
-			    <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+			<th:block th:unless="${session.user}">
+			    <a href="/oauth2/authorization/google" class="btn btn-secondary active" role="button">Google Login</a>                      
+			    <a href="/oauth2/authorization/naver" class="btn btn-success active" role="button">Naver Login</a>
+			    <a href="/oauth2/authorization/naver" class="btn btn-warning active" role="button">KaKao Login</a>
 			</th:block>
         </div>
     </div>
