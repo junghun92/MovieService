@@ -23,19 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
+                        "/",
+                        "/css/**",
+                        "/images/**",
+                        "/js/**",
                         "/community/list",
-                        "/")
+                        "/api/**")
                         .permitAll()
-                .antMatchers("/comunity/**").hasRole(Role.USER.name())
+                .antMatchers("/community/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated()
                 .and()
                 .logout().logoutSuccessUrl("/")

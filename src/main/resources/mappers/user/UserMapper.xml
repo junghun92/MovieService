@@ -8,13 +8,15 @@
         (
         	NAME,
         	EMAIL,
-        	ROLE
+        	ROLE,
+        	REG_DATE
         ) 
         VALUES
         (
         	#{name}, 
         	#{email}, 
-        	#{role}
+        	#{role},
+        	FORMATDATETIME(now(), 'yyyy-MM-dd')
         )
     </insert>
     
