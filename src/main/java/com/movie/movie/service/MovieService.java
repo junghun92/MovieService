@@ -1,10 +1,12 @@
 package com.movie.movie.service;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.movie.api.MovieApi;
-import com.movie.movie.dto.MovieDailyBoxOfficeDto;
+import com.movie.movie.dto.MovieListReqDto;
+import com.movie.movie.dto.MovieListResDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +16,11 @@ public class MovieService {
 
 	private final MovieApi movieApi;
 	
-	public MovieDailyBoxOfficeDto boxOfficeList() {
-		return movieApi.boxOfficeList();
+	public MovieListResDto movieList() {
+		return movieApi.movieList();
+	}
+
+	public List<String> movieInfo(List<MovieListReqDto> movieListReqDto) {
+		return movieApi.movieInfo(movieListReqDto);
 	}
 }

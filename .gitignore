@@ -14,6 +14,7 @@ local.properties
 .loadpath
 .recommenders
 application-oauth.properties
+application-api.properties
 
 # External tool builders
 .externalToolBuilders/

@@ -3,7 +3,7 @@ package com.movie.movie.dto;
 import lombok.Data;
 
 @Data
-public class MovieDailyBoxOfficeDto {
+public class MovieListResDto {
 	private boxOfficeResult boxOfficeResult;
 	
 	@Data
