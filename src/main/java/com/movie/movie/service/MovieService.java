@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.movie.api.MovieApi;
-import com.movie.movie.dto.MovieListReqDto;
 import com.movie.movie.dto.MovieListResDto;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class MovieService {
 		return movieApi.movieList();
 	}
 
-	public List<String> movieInfo(List<MovieListReqDto> movieListReqDto) {
-		return movieApi.movieInfo(movieListReqDto);
+	public List<String> movieImageList() {
+		return movieApi.movieImageList();
 	}
 }

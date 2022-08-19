@@ -3942,7 +3942,7 @@ textarea.form-control-lg {
 .nav-link {
   display: block;
   padding: 0.5rem 1rem;
-  color: #0d6efd;
+  color: #212529;;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
@@ -3952,7 +3952,7 @@ textarea.form-control-lg {
   }
 }
 .nav-link:hover, .nav-link:focus {
-  color: #0a58ca;
+  /* color: #0a58ca; */
 }
 .nav-link.disabled {
   color: #6c757d;
@@ -3999,7 +3999,8 @@ textarea.form-control-lg {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #0d6efd;
+  /* background-color: #0d6efd; */
+  background-color: #212529;
 }
 
 .nav-fill > .nav-link,
@@ -11328,3 +11329,27 @@ textarea.form-control-lg {
     min-width: 500px;
   }
 }
+
+.star-rating {
+    display: inline-block;
+    height: 12px;
+    background: url(https://ssl.pstatic.net/static/movie/2019/11/sp_ico3.png) no-repeat -9999px -9999px;
+}
+
+span.st_off {
+    position: relative;
+    width: 64px;
+    margin-right: 2px;
+    background-position: 0 -1093px;
+}
+
+span.st_on {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-position: 0 -1106px;
+    text-indent: -9999px;
+}
+
