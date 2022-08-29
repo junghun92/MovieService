@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.movie.movie.repository.mapper.MovieMapper">
+
+    <insert id="reserveScreenPlanSave" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO SEAT
+        (
+			THEATERCODE,
+			MOVIECODE,
+			SEATCNT,
+			PLAYDATE,
+			STARTTIME,
+			ENDTIME,
+			REG_DATE
+        ) 
+        VALUES
+        (
+			#{theaterCode},
+			#{movieCode},
+			#{seatCnt},
+			#{playDate},
+			#{startTime},
+			#{endTime},
+        	FORMATDATETIME(now(), 'yyyy-MM-dd')
+        )
+    </insert>
+    
+    <select id="reserveScreenPlanCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			SEAT
+		<where>
+			<if test="theaterCode != null and theaterCode != ''">
+				AND THEATERCODE = #{theaterCode}
+			</if>
+			<if test="movieCode != null and movieCode != ''">
+				AND MOVIECODE = #{movieCode}
+			</if>
+			<if test="playDate != null and playDate != ''">
+				AND PLAYDATE = #{playDate}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				AND STARTTIME = #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND ENDTIME = #{endTime}
+			</if>
+		</where>
+	</select>
+	
+	<select id="reserveScreenPlan" resultType="ReserveScreenPlanDto">
+		SELECT
+			ID,
+			THEATERCODE,
+			MOVIECODE,
+			SEATCNT,
+			PLAYDATE,
+			STARTTIME,
+			ENDTIME,
+			REG_DATE
+		FROM
+			SEAT
+		<where>
+			<if test="theaterCode != null and theaterCode != ''">
+				AND THEATERCODE = #{theaterCode}
+			</if>
+			<if test="movieCode != null and movieCode != ''">
+				AND MOVIECODE = #{movieCode}
+			</if>
+			<if test="playDate != null and playDate != ''">
+				AND PLAYDATE = #{playDate}
+			</if>
+		</where>
+	</select>
+  
+</mapper>

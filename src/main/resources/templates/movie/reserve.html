@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layoutMain :: headFragment">
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+</head>
+
+<script src="/js/movie.js"></script>
+<body>
+    <!-- Navigation-->
+	<th:block th:replace="layout/layoutMain :: navFragment"></th:block>
+	
+	<section>
+		<!-- Content wrapper -->
+		<div class="content-wrapper">
+			<!-- Content -->
+
+			<div class="container-xxl flex-grow-1 container-p-y">
+				<div class="row">
+					<!-- 날짜 -->
+					<div class="col-lg-8 mb-4 order-0">
+						<div class="card">
+							<div class="card-header d-flex align-items-center justify-content-between">
+								<h5 class="card-title m-0 me-2">날짜</h5>
+							</div>
+							<div class="d-flex align-items-end row">
+								<div class="card-body">
+									<div class="col-12 box">
+										<ul class="reserveDate">
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- 영화관 -->
+					<div class="col-md-6 col-lg-4 order-2 mb-4">
+						<div class="card h-100">
+							<div class="card-header d-flex align-items-center justify-content-between">
+								<h5 class="card-title m-0 me-2">영화관</h5>
+							</div>
+							<div class="card-body">
+								<ul class="p-0 m-0">
+									<li class="d-flex mb-4 pb-1">
+										<div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+											<div class="col-12">
+												<ul class="list-group reserveTheater">
+													
+												</ul>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 영화 -->
+					<div class="col-md-6 col-lg-4 order-2 mb-4">
+						<div class="card h-100">
+							<div class="card-header d-flex align-items-center justify-content-between">
+								<h5 class="card-title m-0 me-2">영화</h5>
+							</div>
+							<div class="card-body">
+								<ul class="p-0 m-0">
+									<li class="d-flex mb-4 pb-1">
+										<div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+											<div class="col-12">
+												<ul class="list-group reserveMovie" style="text-align: left;">
+
+												</ul>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- 시간표 -->
+					<div class="col-md-6 col-lg-4 order-2 mb-4">
+						<div class="card h-100">
+							<div class="card-header d-flex align-items-center justify-content-between">
+								<h5 class="card-title m-0 me-2">시간표</h5>
+							</div>
+							<div class="card-body">
+								<div class="col-12 box">
+									<ul class="reserveScreenPlan">
+
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- / Content -->
+		</div>
+	</section>
+	
+	<input type="hidden" id="playDate" name="playDate" th:value="${#calendars.format(#calendars.createNow(), 'yyyyMMdd')}"/> <!-- 상영날짜(오늘날짜 기본 값) -->
+	<input type="hidden" id="movieCode" name="movieCode" th:value="${param.movieCode}" /> <!-- 영화코드 -->
+	<input type="hidden" id="theaterCode" name="theaterCode" th:value="6001" /> <!-- 영화관 코드 기본 값 -->
+	
+	<th:block th:replace="layout/layoutMain :: footerFragment"></th:block>
+
+
+<script th:inline="javascript">
+//날짜
+$(document).on('click', '.reserveDate li',function() {
+	$('.reserveDate li').not(this).removeClass("active");
+	$(this).addClass("active");
+	
+	$("#playDate").val($(this).data("date"));
+	var data = formVal();
+
+	reserveMovie(data.playDate, data.movieCode, data.theaterCode); //상영 영화
+	reserveScreenPlan(data.playDate, data.movieCode, data.theaterCode); //상영시간
+});
+//영화관
+$(document).on('click', '.reserveTheater li',function() {
+	$('.reserveTheater li').not(this).removeClass("active");
+	$(this).addClass("active");
+	
+	$("#theaterCode").val($(this).data("theatercode"));
+	var data = formVal();
+	
+	reserveDate(data.theaterCode); //상영날짜
+	reserveMovie(data.playDate, data.movieCode, data.theaterCode); //상영 영화
+});
+//영화
+$(document).on('click', '.reserveMovie li',function() {
+	$('.reserveMovie li').not(this).removeClass("active");
+	$(this).addClass("active");
+	
+	$("#movieCode").val($(this).data("moviecode"));
+	var data = formVal();
+	
+	reserveScreenPlan(data.playDate, data.movieCode, data.theaterCode); //상영시간
+});
+//시간표
+$(document).on('click', '.reserveScreenPlan li',function() {
+	$('.reserveScreenPlan li').not(this).removeClass("active");
+	$(this).addClass("active");
+});
+
+$(document).ready(function() {
+	var data = formVal();
+	
+	reserveDate(data.theaterCode); //상영날짜
+	reserveTheater(data.movieCode); //영화관
+	reserveMovie(data.playDate, data.movieCode, data.theaterCode); //상영 영화
+	reserveScreenPlan(data.playDate, data.movieCode, data.theaterCode); //상영시간
+});
+
+function formVal(){
+	var data = {
+			"playDate":$("#playDate").val(),//상영날짜
+			"movieCode":$("#movieCode").val(),//영화코드
+			"theaterCode":$("#theaterCode").val()//영화관 코드 기본 값
+		}
+	
+	return data;
+}
+</script>
+</body>
+</html>

@@ -1,65 +1,157 @@
 
-//주간 박스오피스
-function movieList(){
+//영화 리스트
+function movieList(display){
 	$.ajax({
-		type: 'GET',
-		url: '/api/movie',
+		type: 'POST',
+		url: '/api/movie/list',
 		dataType: 'json',
-		contentType: 'application/json; charset=utf-8'
+		data: {"display":display}
 	}).done(function(data){
-		var weeklyBoxOfficeList = data.boxOfficeResult.weeklyBoxOfficeList;
-		var html = '';
+		$(".boxOffice").html(movieData(data.boxOfficeList));	//박스오피스
+		$(".comming").html(movieData(data.commingList));		//상영 예정작
+
+	}).fail(function(error){
+		alert(JSON.stringify(error));
+	});
+	
+}
+
+function movieData(data){
+	var html = '';
+	
+	$.each(data, function(index, item){
+		var bg = item.movieAge == '18' ? 'bg-danger' : 'bg-success';
+		var movieAge = item.movieAge == '0' ? '전체' : item.movieAge;
 		
-		$(".showRange").html(data.boxOfficeResult.showRange);
-		//영화 정보(포스터)
-		var movieImage = movieImageList();
-		
-		//영화 리스트
-		$.each(weeklyBoxOfficeList, function(index, item){
-			html += '<div class="col mb-5">';
-			html += '   <div class="card h-100">';
-			html += '       <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; left: 0.5rem">'+ item.rank +'</div>';
-			html += '       <img class="card-img-top" src="'+ movieImage[index] +'" alt="..." />';
-			html += '       <div class="card-body p-4">';
-			html += '           <div class="text-center">';
-			html += '               <h5 class="fw-bolder">'+ item.movieNm +'</h5>';
-			html += '               <div class="d-flex justify-content-center small text-warning mb-2">';
-			html +=	'					<span class="star-rating st_off"><span class="star-rating score st_on" style=""></span></span>';
-			html += '               </div>';
-			html += '               <span class="fw-bolder">개봉일</span> '+ item.openDt +'</br>';
-			html += '               <span class="fw-bolder">관객수</span> '+ addComma(item.audiAcc) +'명';
-			html += '           </div>';
-			html += '       </div>';
-			html += '       <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">';
-			html += '           <div class="text-center">';
-			html += '				<a class="btn btn-outline-dark mt-auto" href="#">상세정보</a>';
-			html += '				<a class="btn btn-outline-dark mt-auto" href="#">예매하기</a>';
-			html += '			</div>';
-			html += '       </div>';
-			html += '   </div>';
-			html += '</div>';
+		html += '<div class="col mb-5">';
+		html += '   <div class="card h-100">';
+		html += '       <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; left: 0.5rem">'+ ++index +'</div>';
+		html += '       <img class="card-img-top" src="'+ item.movieImage +'"/>';
+		html += '       <div class="card-body p-4">';
+		html += '           <div class="text-center">';
+		html += '               <div class="badge text-white '+ bg +'">'+ movieAge +'</div>';
+		html += '				<h5 class="fw-bolder">'+ item.movieNm +'</h5>';
+		html += '           </div>';
+		html += '       </div>';
+		html += '       <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">';
+		html += '           <div class="text-center">';
+		html += '				<a class="btn btn-outline-dark mt-auto" href="#">상세정보</a>';
+		html += '				<a class="btn btn-outline-dark mt-auto" href="/movie/reserve?movieCode='+ item.movieCode +'">예매하기</a>';
+		html += '			</div>';
+		html += '       </div>';
+		html += '   </div>';
+		html += '</div>';
+	});
+	
+	return html;
+}
+
+//영화관
+function reserveTheater(movieCode){
+	var html = '';
+	
+	$.ajax({
+		type: 'POST',
+		url: '/api/movie/reserveTheater',
+		dataType: 'json',
+		data: {"movieCode":movieCode}
+	}).done(function(data){
+		var theaterCode = $("#theaterCode").val(); //영화관
+		$.each(data, function(index, item){
+			var addClass = theaterCode == item.theaterCode ? 'active' : '';
+			
+			html += '<li class="list-group-item btn '+ addClass +'" data-theatercode="'+ item.theaterCode +'">';
+			html += 	item.theater
+			html += '</li>';
 		});
 		
-		$(".movieList").html(html);
+		$(".reserveTheater").html(html);
 	}).fail(function(error){
 		alert(JSON.stringify(error));
 	});
 }
 
-function movieImageList(){
-	var movieImageList = '';
+// 상영날짜
+function reserveDate(theaterCode){
+	$.ajax({
+		type: 'POST',
+		url: '/api/movie/reserveDate',
+		dataType: 'json',
+		data: {"theaterCode":theaterCode}
+	}).done(function(data){
+		var html = '';
+		var playDate = $("#playDate").val(); //상영날짜
+		$.each(data, function(index, item){
+			var addClass = playDate == item.date ? 'active' : '';
+			
+			html += '<li class="btn '+ addClass +'" data-date="'+ item.date+'">';
+			html += 	item.day;
+			html += '</li>';
+		});
+		
+		$(".reserveDate").html(html);
+	}).fail(function(error){
+		alert(JSON.stringify(error));
+	});
+}
+
+// 상영영화
+function reserveMovie(playDate, movieCode, theaterCode){
+	var data = {
+		"playDate":playDate,
+		"movieCode":movieCode,
+		"theaterCode":theaterCode
+	}
+	$.ajax({
+		type: 'POST',
+		url: '/api/movie/reserveMovie',
+		dataType: 'json',
+		data: data
+	}).done(function(data){
+		var html = '';
+		var movieCode = $("#movieCode").val(); //영화관
+		
+		$.each(data, function(index, item){
+			var bg = item.movieAge == '18' ? 'bg-danger' : 'bg-success';
+			var movieAge = item.movieAge == '0' ? '전체' : item.movieAge;
+			var addClass = movieCode == item.movieCode && item.disabledChk == false ? 'active' : '';
+			addClass += item.disabledChk == true ? ' disabled' : '';
+				
+			html += '<li class="list-group-item btn '+ addClass +'" data-moviecode="'+ item.movieCode +'">';
+			html += '<div class="badge text-white '+ bg +'">'+ movieAge +'</div> ';
+			html += 	item.movieNm;
+			html += '</li>';
+		});
+		
+		$(".reserveMovie").html(html);
+	}).fail(function(error){
+		alert(JSON.stringify(error));
+	});
+}
+
+// 상영시간
+function reserveScreenPlan(playDate, movieCode, theaterCode){
+	var data = {
+			"playDate":playDate,
+			"movieCode":movieCode,
+			"theaterCode":theaterCode
+		}
 
 	$.ajax({
 		type: 'POST',
-		url: '/api/movie/imageList',
+		url: '/api/movie/reserveScreenPlan',
 		dataType: 'json',
-		async: false,
-		contentType: 'application/json; charset=utf-8'
+		data: data
 	}).done(function(data){
-		movieImageList = data;
+		var html = '';
+		
+		$.each(data, function(index, item){
+			html += '<li class="btn">'+ item.startTime +' ('+ item.seatCnt +'석)</li>';
+		});
+		
+		$(".reserveScreenPlan").html(html);
 	}).fail(function(error){
 		alert(JSON.stringify(error));
 	});
-	return movieImageList;
-
 }
+

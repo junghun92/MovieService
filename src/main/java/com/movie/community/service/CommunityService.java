@@ -12,31 +12,15 @@ import com.movie.paging.PagingResponse;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
-@RequiredArgsConstructor
-public class CommunityService{
+
+public interface CommunityService{
 	
-	private final CommunityRepository communityRepository;
-	
-	public Community save(Community community) {
-		return communityRepository.save(community);
-	}
+	public Community save(Community community);
 
-	public PagingResponse<Community> findAll(SearchDto params) {
-		int count = communityRepository.count(params);
-		Pagination pagination = new Pagination(count, params);
-		params.setPagination(pagination);
-		
-		List<Community> list = communityRepository.findAll(params);
-		return new PagingResponse<>(list, pagination);
-	}
+	public PagingResponse<Community> findAll(SearchDto params) ;
 
-	public Community findById(long id) {
-		return communityRepository.findById(id);
-	}
+	public Community findById(long id);
 
-	public void update(long id, Community community) {
-		communityRepository.update(id, community);
-	}
+	public void update(long id, Community community);
 
 }

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layoutMain :: headFragment">
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+</head>
+<script src="/js/movie.js"></script>
+<body>
+       <!-- Navigation-->
+       <th:block th:replace="layout/layoutMain :: navFragment"></th:block>
+
+        <div class="text-center text-white">
+            <img src="https://caching2.lottecinema.co.kr/lotte_image/2022/Li/0811/Li_1920420.jpg" />
+        </div>
+
+       <!-- Section-->
+		<section class="py-5">
+			<div class="container px-4 px-lg-5 mt-5">
+				<ul class="nav nav-pills nav-justified" id="myTab" role="tablist">
+					<li class="nav-item" role="presentation">
+						<button class="nav-link active" id="userinfo-tab" data-bs-toggle="tab"
+							data-bs-target="#userinfo" type="button" role="tab" aria-controls="userinfo"
+							aria-selected="true"><strong>주간 박스오피스</strong></button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="myreview-tab" data-bs-toggle="tab"
+							data-bs-target="#myreview" type="button" role="tab"
+							aria-controls="myreview" aria-selected="false"><strong>예매순위</strong></button>
+					</li>
+				</ul>
+
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="userinfo" role="tabpanel"
+						aria-labelledby="userinfo-tab">
+						<hr class="my-4">
+						<div class="movieWeekly row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+			
+						</div>
+					</div>
+					<div class="tab-pane fade" id="myreview" role="tabpanel"
+						aria-labelledby="myreview-tab">
+						<hr class="my-4">
+						<div class="movieRank row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+			
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+	<th:block  th:replace="layout/layoutMain :: footerFragment"></th:block>
+	
+	
+<script th:inline="javascript">
+$( document ).ready(function() {
+	movieWeekly(); //주간 박스오피스
+	movieRanking(); //예매순위
+});
+
+</script>
+</body>
+</html>
